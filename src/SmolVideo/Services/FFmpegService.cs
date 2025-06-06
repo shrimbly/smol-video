@@ -1,9 +1,9 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
-using VideoOptimizer.Models;
+using SmolVideo.Models;
 
-namespace VideoOptimizer.Services;
+namespace SmolVideo.Services;
 
 public class FFmpegService
 {

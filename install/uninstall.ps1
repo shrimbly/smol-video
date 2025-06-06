@@ -1,4 +1,4 @@
-# Video Optimizer - Registry Uninstaller
+# Smol-Video - Registry Uninstaller
 # This script removes the "Optimise video" context menu from video files
 
 # Check if running as administrator
@@ -9,7 +9,7 @@ if (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
     exit 1
 }
 
-Write-Host "Video Optimizer - Context Menu Uninstaller" -ForegroundColor Red
+Write-Host "Smol-Video - Context Menu Uninstaller" -ForegroundColor Red
 Write-Host "===========================================" -ForegroundColor Red
 Write-Host ""
 

@@ -1,4 +1,4 @@
-# Video Optimizer
+# Smol-Video
 
 A professional Windows application that adds a context menu option to optimize video files using FFmpeg. Simply right-click on any video file and select "Optimise video" to compress it with high quality settings.
 
@@ -15,13 +15,13 @@ A professional Windows application that adds a context menu option to optimize v
 ## Installation
 
 ### Option 1: Professional Installer (Recommended)
-1. Download the latest `VideoOptimizer-Setup-v1.0.0.exe` from releases
+1. Download the latest `SmolVideo-Setup-v1.0.0.exe` from releases
 2. Run the installer as administrator
 3. Follow the installation wizard
 4. The context menu will be automatically registered
 
 ### Option 2: Manual Installation
-1. Extract the application files to `C:\Program Files\VideoOptimizer\`
+1. Extract the application files to `C:\Program Files\SmolVideo\`
 2. Copy FFmpeg binaries to `Resources\ffmpeg\` folder
 3. Run `install\install.ps1` as administrator to register context menu
 
@@ -63,13 +63,13 @@ A professional Windows application that adds a context menu option to optimize v
 ### Building the Application
 ```powershell
 # Clone the repository
-git clone https://github.com/videooptimizer/videooptimizer.git
-cd videooptimizer
+git clone https://github.com/shrimbly/smol-video.git
+cd smol-video
 
 # Build the application
-dotnet publish src/VideoOptimizer/VideoOptimizer.csproj -c Release -r win-x64 --self-contained true
+dotnet publish src/SmolVideo/SmolVideo.csproj -c Release -r win-x64 --self-contained true
 
-# Download FFmpeg (place ffmpeg.exe and ffprobe.exe in src/VideoOptimizer/Resources/ffmpeg/)
+# Download FFmpeg (place ffmpeg.exe and ffprobe.exe in src/SmolVideo/Resources/ffmpeg/)
 
 # Create installer (requires Inno Setup)
 iscc install/setup.iss
@@ -78,14 +78,14 @@ iscc install/setup.iss
 ### FFmpeg Integration
 The application requires FFmpeg binaries. You can:
 1. Download from [FFmpeg.org](https://ffmpeg.org/download.html)
-2. Place `ffmpeg.exe` and `ffprobe.exe` in `src/VideoOptimizer/Resources/ffmpeg/`
+2. Place `ffmpeg.exe` and `ffprobe.exe` in `src/SmolVideo/Resources/ffmpeg/`
 3. These will be included in the published application
 
 ## Uninstallation
 
 ### Using Windows Settings
 1. Go to Settings > Apps
-2. Find "Video Optimizer" in the list
+2. Find "Smol-Video" in the list
 3. Click "Uninstall"
 
 ### Manual Uninstallation

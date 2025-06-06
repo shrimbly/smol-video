@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace VideoOptimizer.Models;
+namespace SmolVideo.Models;
 
 public class OptimizationOptions
 {

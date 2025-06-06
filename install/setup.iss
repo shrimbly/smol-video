@@ -1,27 +1,28 @@
-; Video Optimizer - Inno Setup Script
+; Smol-Video - Inno Setup Script
 ; Professional Windows Installer
 
-#define MyAppName "Video Optimizer"
+#define MyAppName "Smol-Video"
 #define MyAppVersion "1.0.0"
-#define MyAppPublisher "Video Optimizer Team"
-#define MyAppURL "https://github.com/videooptimizer/videooptimizer"
-#define MyAppExeName "VideoOptimizer.exe"
+#define MyAppPublisher "Smol-Video Team"
+#define MyAppURL "https://github.com/shrimbly/smol-video"
+#define MyAppExeName "SmolVideo.exe"
 
 [Setup]
-AppId={{8A7B9C1D-2E3F-4567-8901-234567890ABC}
+AppId={{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
+AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={autopf}\{#MyAppName}
+DefaultDirName={autopf}\SmolVideo
 DisableProgramGroupPage=yes
 LicenseFile=..\LICENSE
 InfoBeforeFile=..\README.md
 OutputDir=..\dist
-OutputBaseFilename=VideoOptimizer-Setup-v{#MyAppVersion}
-SetupIconFile=..\src\VideoOptimizer\Resources\app-icon.ico
+OutputBaseFilename=SmolVideo-Setup-v{#MyAppVersion}
+SetupIconFile=..\src\SmolVideo\Resources\app-icon.ico
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -35,9 +36,10 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Tasks]
 Name: "contextmenu"; Description: "Add 'Optimise video' to context menu for video files"; GroupDescription: "Integration:"; Flags: checked
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "..\src\VideoOptimizer\bin\Release\net8.0-windows\win-x64\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\src\SmolVideo\bin\Release\net8.0-windows\win-x64\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "..\README.md"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\LICENSE"; DestDir: "{app}"; Flags: ignoreversion; DestName: "LICENSE.txt"
 
@@ -98,13 +100,21 @@ begin
 end;
 
 function InitializeSetup(): Boolean;
+var
+  Version: TWindowsVersion;
+  NetFrameworkInstalled: Boolean;
 begin
-  // Check if .NET 8.0 is installed
-  if not IsDotNetInstalled(net80, 0) then begin
-    MsgBox('Video Optimizer requires Microsoft .NET 8.0 Runtime or later.'#13#13
-           'Please install .NET 8.0 Runtime before installing Video Optimizer.'#13#13
-           'You can download it from: https://dotnet.microsoft.com/download', 
-           mbError, MB_OK);
+  GetWindowsVersionEx(Version);
+  
+  // Check for .NET 8.0 Runtime
+  NetFrameworkInstalled := RegKeyExists(HKLM, 'SOFTWARE\WOW6432Node\dotnet\Setup\InstalledVersions\x64\sharedhost') or
+                          RegKeyExists(HKLM, 'SOFTWARE\dotnet\Setup\InstalledVersions\x64\sharedhost');
+  
+  if not NetFrameworkInstalled then
+  begin
+    MsgBox('Smol-Video requires Microsoft .NET 8.0 Runtime or later.'#13#13
+           'Please install .NET 8.0 Runtime before installing Smol-Video.'#13#13
+           'You can download it from: https://dotnet.microsoft.com/download', mbError, MB_OK);
     Result := False;
   end else
     Result := True;

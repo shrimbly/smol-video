@@ -1,4 +1,4 @@
-# Video Optimizer - Build Instructions
+# Smol-Video - Build Instructions
 
 ## Prerequisites
 
@@ -14,7 +14,7 @@ The application requires FFmpeg binaries. You have two options:
 #### Option 1: Download and Place Manually
 1. Download FFmpeg from [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
 2. Extract `ffmpeg.exe` and `ffprobe.exe`
-3. Place them in: `src/VideoOptimizer/Resources/ffmpeg/`
+3. Place them in: `src/SmolVideo/Resources/ffmpeg/`
 
 #### Option 2: Auto-download during build
 The build script can automatically download FFmpeg binaries for you.
@@ -37,7 +37,7 @@ This script will:
 ### Method 2: Manual Build
 ```powershell
 # Navigate to the project directory
-cd src/VideoOptimizer
+cd src/SmolVideo
 
 # Restore dependencies
 dotnet restore
@@ -51,9 +51,9 @@ dotnet publish --configuration Release --runtime win-x64 --self-contained true -
 
 ## Build Outputs
 
-After building, you'll find the following in `src/VideoOptimizer/bin/Release/net8.0-windows/win-x64/publish/`:
+After building, you'll find the following in `src/SmolVideo/bin/Release/net8.0-windows/win-x64/publish/`:
 
-- `VideoOptimizer.exe` - Main application executable
+- `SmolVideo.exe` - Main application executable
 - `Resources/ffmpeg/` - FFmpeg binaries
 - `LICENSE` - License file
 - `README.md` - User documentation
@@ -74,20 +74,20 @@ After building, you'll find the following in `src/VideoOptimizer/bin/Release/net
 "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" install\setup.iss
 ```
 
-The installer will be created in the `dist/` directory as `VideoOptimizer-Setup-v1.0.0.exe`.
+The installer will be created in the `dist/` directory as `SmolVideo-Setup-v1.0.0.exe`.
 
 ## Project Structure
 
 ```
 optimise-video/
 ├── src/
-│   └── VideoOptimizer/
+│   └── SmolVideo/
 │       ├── Models/              # Data models
 │       ├── Services/            # Business logic
 │       ├── UI/                  # WPF user interface
 │       ├── Resources/           # Icons, FFmpeg binaries
 │       ├── Program.cs           # Application entry point
-│       └── VideoOptimizer.csproj
+│       └── SmolVideo.csproj
 ├── install/                     # Installer configuration
 │   ├── setup.iss               # Inno Setup script
 │   ├── install.ps1             # Context menu registration
@@ -101,12 +101,12 @@ optimise-video/
 
 ### Setting up Development Environment
 1. Clone the repository
-2. Open `VideoOptimizer.sln` in Visual Studio
+2. Open `SmolVideo.sln` in Visual Studio
 3. Ensure .NET 8.0 SDK is installed
 4. Build the solution (F6 in Visual Studio)
 
 ### Running in Development
-- Set `VideoOptimizer` as the startup project
+- Set `SmolVideo` as the startup project
 - Press F5 to debug or Ctrl+F5 to run without debugging
 
 ### Testing
@@ -115,7 +115,7 @@ optimise-video/
 dotnet test
 
 # Test the built application
-.\src\VideoOptimizer\bin\Release\net8.0-windows\win-x64\publish\VideoOptimizer.exe
+.\src\SmolVideo\bin\Release\net8.0-windows\win-x64\publish\SmolVideo.exe
 ```
 
 ## Troubleshooting
@@ -142,14 +142,14 @@ dotnet test
 ### Clean Build
 ```powershell
 # Remove all build artifacts
-Remove-Item -Recurse -Force src\VideoOptimizer\bin, src\VideoOptimizer\obj
+Remove-Item -Recurse -Force src\SmolVideo\bin, src\SmolVideo\obj
 dotnet clean
 ```
 
 ## Distribution
 
 ### For End Users
-- Distribute the installer: `dist/VideoOptimizer-Setup-v1.0.0.exe`
+- Distribute the installer: `dist/SmolVideo-Setup-v1.0.0.exe`
 - Users run the installer with Administrator privileges
 - The installer handles all dependencies and context menu registration
 
@@ -179,6 +179,6 @@ The `build.ps1` script supports several parameters:
 ## Version Management
 
 Update version numbers in:
-- `src/VideoOptimizer/VideoOptimizer.csproj` (AssemblyVersion, FileVersion)
+- `src/SmolVideo/SmolVideo.csproj` (AssemblyVersion, FileVersion)
 - `install/setup.iss` (MyAppVersion)
 - `README.md` (if version is mentioned) 

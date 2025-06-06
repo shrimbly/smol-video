@@ -1,13 +1,13 @@
 using System.IO;
 using System.Windows;
-using VideoOptimizer.Models;
-using VideoOptimizer.Services;
-using VideoOptimizer.UI;
+using SmolVideo.Models;
+using SmolVideo.Services;
+using SmolVideo.UI;
 using Microsoft.Win32;
 using System.Diagnostics;
 using System.Security.Principal;
 
-namespace VideoOptimizer;
+namespace SmolVideo;
 
 public class Program
 {
@@ -96,19 +96,19 @@ public class Program
     {
         var currentExe = Environment.ProcessPath ?? Process.GetCurrentProcess().MainModule?.FileName ?? "";
         var currentDir = Path.GetDirectoryName(currentExe) ?? "";
-        var targetDir = @"C:\Program Files\VideoOptimizer";
+        var targetDir = @"C:\Program Files\SmolVideo";
         
-        var message = "Video Optimizer - Self Installer\n\n" +
-                     "This will install Video Optimizer with the following features:\n" +
+        var message = "Smol-Video - Self Installer\n\n" +
+                     "This will install Smol-Video with the following features:\n" +
                      "• Copy application to Program Files\n" +
                      "• Install FFmpeg dependencies\n" +
                      "• Register right-click context menu for video files\n\n" +
                      $"Current location: {currentDir}\n" +
                      $"Install location: {targetDir}\n\n" +
-                     "Would you like to install Video Optimizer?\n\n" +
+                     "Would you like to install Smol-Video?\n\n" +
                      "Note: Administrator privileges are required.";
 
-        var result = MessageBox.Show(message, "Video Optimizer - Install", 
+        var result = MessageBox.Show(message, "Smol-Video - Install", 
             MessageBoxButton.YesNo, MessageBoxImage.Question);
 
         if (result == MessageBoxResult.Yes)
@@ -131,7 +131,7 @@ public class Program
         {
             var currentExe = Environment.ProcessPath ?? Process.GetCurrentProcess().MainModule?.FileName ?? "";
             var currentDir = Path.GetDirectoryName(currentExe) ?? "";
-            var targetDir = @"C:\Program Files\VideoOptimizer";
+            var targetDir = @"C:\Program Files\SmolVideo";
 
             // Create target directory
             if (Directory.Exists(targetDir))
@@ -146,7 +146,7 @@ public class Program
             // Register context menu
             RegisterContextMenu(targetDir);
 
-            var successMessage = "Video Optimizer has been installed successfully!\n\n" +
+            var successMessage = "Smol-Video has been installed successfully!\n\n" +
                                "Installation completed:\n" +
                                $"• Application installed to: {targetDir}\n" +
                                "• FFmpeg dependencies included\n" +
@@ -189,7 +189,7 @@ public class Program
 
     private static void RegisterContextMenu(string installPath)
     {
-        var appPath = Path.Combine(installPath, "VideoOptimizer.exe");
+        var appPath = Path.Combine(installPath, "SmolVideo.exe");
         var videoExtensions = new[] {
             ".mp4", ".avi", ".mkv", ".mov", ".wmv", ".flv", ".webm", ".m4v",
             ".mpg", ".mpeg", ".3gp", ".asf", ".rm", ".rmvb", ".ts", ".mts"
@@ -209,13 +209,13 @@ public class Program
                 }
 
                 // Create shell command key
-                var shellKeyPath = $@"{progId}\shell\VideoOptimizer";
+                var shellKeyPath = $@"{progId}\shell\SmolVideo";
                 using var shellKey = Registry.ClassesRoot.CreateSubKey(shellKeyPath);
                 shellKey.SetValue("", "Optimise video");
                 shellKey.SetValue("Icon", appPath);
 
                 // Create command key
-                var commandKeyPath = $@"{progId}\shell\VideoOptimizer\command";
+                var commandKeyPath = $@"{progId}\shell\SmolVideo\command";
                 using var commandKey = Registry.ClassesRoot.CreateSubKey(commandKeyPath);
                 commandKey.SetValue("", $"\"{appPath}\" \"%1\"");
             }
@@ -267,18 +267,18 @@ public class Program
 
     private static void ShowUsageDialog()
     {
-        var message = "Video Optimizer\n\n" +
+        var message = "Smol-Video\n\n" +
                      "This application is designed to be used from the Windows context menu.\n\n" +
                      "To use:\n" +
                      "1. Right-click on a video file in Windows Explorer\n" +
                      "2. Select 'Optimise video' from the context menu\n\n" +
                      "The video will be optimized using FFmpeg with CRF 18 quality settings.";
 
-        MessageBox.Show(message, "Video Optimizer", MessageBoxButton.OK, MessageBoxImage.Information);
+        MessageBox.Show(message, "Smol-Video", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private static void ShowErrorDialog(string title, string message)
     {
-        MessageBox.Show(message, $"Video Optimizer - {title}", MessageBoxButton.OK, MessageBoxImage.Error);
+        MessageBox.Show(message, $"Smol-Video - {title}", MessageBoxButton.OK, MessageBoxImage.Error);
     }
 } 

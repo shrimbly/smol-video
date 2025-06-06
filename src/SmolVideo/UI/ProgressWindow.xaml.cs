@@ -2,10 +2,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Threading;
-using VideoOptimizer.Models;
-using VideoOptimizer.Services;
+using SmolVideo.Models;
+using SmolVideo.Services;
 
-namespace VideoOptimizer.UI;
+namespace SmolVideo.UI;
 
 public partial class ProgressWindow : Window
 {

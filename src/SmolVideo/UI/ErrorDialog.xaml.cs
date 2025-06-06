@@ -1,6 +1,6 @@
 using System.Windows;
 
-namespace VideoOptimizer.UI;
+namespace SmolVideo.UI;
 
 public partial class ErrorDialog : Window
 {

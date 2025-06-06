@@ -7,10 +7,11 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>Resources\app-icon.ico</ApplicationIcon>
-    <AssemblyTitle>Video Optimizer</AssemblyTitle>
-    <AssemblyDescription>Professional video optimization tool with FFmpeg integration</AssemblyDescription>
-    <AssemblyCompany>Video Optimizer Team</AssemblyCompany>
-    <AssemblyProduct>Video Optimizer</AssemblyProduct>
+    <AssemblyTitle>Smol-Video</AssemblyTitle>
+    <AssemblyDescription>Professional video optimization tool with context menu integration</AssemblyDescription>
+    <AssemblyCompany>Smol-Video Team</AssemblyCompany>
+    <AssemblyProduct>Smol-Video</AssemblyProduct>
+    <AssemblyCopyright>Copyright © 2024 Smol-Video Team</AssemblyCopyright>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
     <PublishSingleFile>true</PublishSingleFile>

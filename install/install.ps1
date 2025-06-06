@@ -1,8 +1,8 @@
-# Video Optimizer - Registry Installer
+# Smol-Video - Registry Installer
 # This script registers the "Optimise video" context menu for video files
 
 param(
-    [string]$InstallPath = "C:\Program Files\VideoOptimizer"
+    [string]$InstallPath = "C:\Program Files\SmolVideo"
 )
 
 # Check if running as administrator
@@ -13,7 +13,7 @@ if (-NOT ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
     exit 1
 }
 
-Write-Host "Video Optimizer - Context Menu Installer" -ForegroundColor Green
+Write-Host "Smol-Video - Context Menu Installer" -ForegroundColor Green
 Write-Host "=========================================" -ForegroundColor Green
 Write-Host ""
 
@@ -24,11 +24,11 @@ $videoExtensions = @(
 )
 
 # Application executable path
-$appPath = Join-Path $InstallPath "VideoOptimizer.exe"
+$appPath = Join-Path $InstallPath "SmolVideo.exe"
 
 # Verify application exists
 if (-not (Test-Path $appPath)) {
-    Write-Host "Error: VideoOptimizer.exe not found at: $appPath" -ForegroundColor Red
+    Write-Host "Error: SmolVideo.exe not found at: $appPath" -ForegroundColor Red
     Write-Host "Please ensure the application is properly installed." -ForegroundColor Red
     Write-Host "Press any key to exit..."
     $null = $Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")

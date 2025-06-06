@@ -1,4 +1,4 @@
-# Video Optimizer - Build Script
+# Smol-Video - Build Script
 # Automates building, publishing, and creating installer
 
 param(
@@ -11,13 +11,13 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "Video Optimizer Build Script" -ForegroundColor Green
+Write-Host "Smol-Video Build Script" -ForegroundColor Green
 Write-Host "============================" -ForegroundColor Green
 Write-Host ""
 
 # Set paths
 $RootDir = $PSScriptRoot
-$ProjectDir = Join-Path $RootDir "src\VideoOptimizer"
+$ProjectDir = Join-Path $RootDir "src\SmolVideo"
 $PublishDir = Join-Path $ProjectDir "bin\$Configuration\net8.0-windows\$Runtime\publish"
 $ResourcesDir = Join-Path $PublishDir "Resources"
 $FFmpegDir = Join-Path $ResourcesDir "ffmpeg"
@@ -163,7 +163,7 @@ Write-Host "  Configuration: $Configuration" -ForegroundColor Gray
 Write-Host "  Runtime: $Runtime" -ForegroundColor Gray
 Write-Host "  Output Directory: $PublishDir" -ForegroundColor Gray
 
-$ExePath = Join-Path $PublishDir "VideoOptimizer.exe"
+$ExePath = Join-Path $PublishDir "SmolVideo.exe"
 if (Test-Path $ExePath) {
     $FileInfo = Get-Item $ExePath
     $FileSize = [math]::Round($FileInfo.Length / 1MB, 2)
@@ -192,7 +192,7 @@ if ($CreateInstaller) {
         if ($LASTEXITCODE -eq 0) {
             Write-Host "  Installer created successfully." -ForegroundColor Green
             
-            $InstallerPath = Join-Path $DistDir "VideoOptimizer-Setup-v1.0.0.exe"
+            $InstallerPath = Join-Path $DistDir "SmolVideo-Setup-v1.0.0.exe"
             if (Test-Path $InstallerPath) {
                 $InstallerInfo = Get-Item $InstallerPath
                 $InstallerSize = [math]::Round($InstallerInfo.Length / 1MB, 2)
@@ -214,6 +214,6 @@ Write-Host ""
 Write-Host "Next steps:" -ForegroundColor White
 Write-Host "  1. Test the application: $ExePath" -ForegroundColor Gray
 Write-Host "  2. Install context menu: Run install\install.ps1 as administrator" -ForegroundColor Gray
-if ($CreateInstaller -and (Test-Path (Join-Path $DistDir "VideoOptimizer-Setup-v1.0.0.exe"))) {
-    Write-Host "  3. Distribute installer: $DistDir\VideoOptimizer-Setup-v1.0.0.exe" -ForegroundColor Gray
+if ($CreateInstaller -and (Test-Path (Join-Path $DistDir "SmolVideo-Setup-v1.0.0.exe"))) {
+    Write-Host "  3. Distribute installer: $DistDir\SmolVideo-Setup-v1.0.0.exe" -ForegroundColor Gray
 }
