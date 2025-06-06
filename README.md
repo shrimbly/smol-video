@@ -14,7 +14,7 @@ Adds a context menu option to optimize video files using FFmpeg. Simply right-cl
 
 ## Installation
 
-### Option 1: Professional Installer (Recommended)
+### Option 1: Installer (Recommended)
 1. Download the latest `SmolVideo-Setup-v1.0.0.exe` from releases
 2. Run the installer as administrator
 3. Follow the installation wizard
