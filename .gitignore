@@ -1,0 +1,67 @@
+#history
+.history/
+
+# Build Artifacts
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio temporary files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# FFmpeg and media processing resources
+**/Resources/ffmpeg/
+**/ffmpeg/
+**/ffprobe/
+*.exe
+*.dll
+*.pdb
+
+# Publish profiles and build outputs
+publish/
+FolderProfile.pubxml
+*.pubxml
+
+# NuGet packages
+packages/
+*.nupkg
+*.snupkg
+
+# Windows specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Installation and distribution files
+dist/
+*.msi
+*.exe
+setup/
+
+# Temporary files
+*.tmp
+*.temp
+*~
+
+# Editor history and backup files
+.history/
+*.bak
+*.swp
+*.swo
+*~
+
+# Build outputs and artifacts
+*.sourcelink.json
+
+# IDE and editor files
+.vscode/
+.idea/
+*.code-workspace
