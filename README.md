@@ -1,6 +1,6 @@
 # Smol-Video
 
-A professional Windows application that adds a context menu option to optimize video files using FFmpeg. Simply right-click on any video file and select "Optimise video" to compress it with high quality settings.
+Adds a context menu option to optimize video files using FFmpeg. Simply right-click on any video file and select "Optimise video" to compress it with high quality settings.
 
 ## Features
 
@@ -14,7 +14,7 @@ A professional Windows application that adds a context menu option to optimize v
 
 ## Installation
 
-### Option 1: Professional Installer (Recommended)
+### Option 1: Installer (Recommended)
 1. Download the latest `SmolVideo-Setup-v1.0.0.exe` from releases
 2. Run the installer as administrator
 3. Follow the installation wizard
