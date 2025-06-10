@@ -22,14 +22,22 @@ public class Program
             // Handle command line arguments
             if (args.Length == 0)
             {
-                ShowInstallerDialog();
+                // Launch video editor when no arguments provided
+                var editorWindow = new VideoEditorWindow();
+                app.Run(editorWindow);
                 return;
             }
 
-            // Check for special installer argument
+            // Check for special arguments
             if (args.Length == 1 && args[0].Equals("--install", StringComparison.OrdinalIgnoreCase))
             {
                 PerformInstallation();
+                return;
+            }
+            
+            if (args.Length == 1 && args[0].Equals("--setup", StringComparison.OrdinalIgnoreCase))
+            {
+                ShowInstallerDialog();
                 return;
             }
 
@@ -57,10 +65,17 @@ public class Program
             // Check if FFmpeg is available
             if (!ffmpegService.IsFFmpegAvailable())
             {
-                ShowErrorDialog("FFmpeg Not Found", 
-                    "FFmpeg is required but was not found in the application directory.\n\n" +
-                    "Please ensure FFmpeg is properly bundled with the application.");
-                return;
+                // Check if system FFmpeg is available as fallback
+                var systemAvailable = Task.Run(async () => await ffmpegService.IsSystemFFmpegAvailableAsync()).Result;
+                if (!systemAvailable)
+                {
+                    ShowErrorDialog("FFmpeg Not Found", 
+                        "FFmpeg is required but was not found in the application directory or system PATH.\n\n" +
+                        "Please either:\n" +
+                        "• Ensure FFmpeg is properly bundled with the application, or\n" +
+                        "• Install FFmpeg and add it to your system PATH");
+                    return;
+                }
             }
 
             // Create optimization options

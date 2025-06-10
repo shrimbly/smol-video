@@ -26,11 +26,83 @@ public class FFmpegService
         return File.Exists(_ffmpegPath) && File.Exists(_ffprobePath);
     }
 
+    public async Task<bool> IsSystemFFmpegAvailableAsync()
+    {
+        try
+        {
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = "ffmpeg",
+                Arguments = "-version",
+                UseShellExecute = false,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                CreateNoWindow = true
+            };
+
+            using var process = new Process { StartInfo = processStartInfo };
+            process.Start();
+            await process.WaitForExitAsync();
+            return process.ExitCode == 0;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    private async Task<string?> GetSystemFFmpegPathAsync()
+    {
+        var systemPaths = new[] { "ffmpeg", "ffmpeg.exe" };
+        
+        foreach (var ffmpegName in systemPaths)
+        {
+            try
+            {
+                var processStartInfo = new ProcessStartInfo
+                {
+                    FileName = ffmpegName,
+                    Arguments = "-version",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
+                };
+
+                using var process = new Process { StartInfo = processStartInfo };
+                process.Start();
+                await process.WaitForExitAsync();
+                
+                if (process.ExitCode == 0)
+                {
+                    return ffmpegName;
+                }
+            }
+            catch
+            {
+                // Continue to next path
+            }
+        }
+        
+        return null;
+    }
+
     public async Task<ProcessResult> OptimizeVideoAsync(OptimizationOptions options, CancellationToken cancellationToken = default)
     {
-        if (!IsFFmpegAvailable())
+        string? effectiveFfmpegPath = null;
+        
+        if (IsFFmpegAvailable())
         {
-            return ProcessResult.CreateError("FFmpeg not found. Please ensure FFmpeg is bundled with the application.");
+            effectiveFfmpegPath = _ffmpegPath;
+        }
+        else
+        {
+            // Try to use system FFmpeg if bundled version not available
+            effectiveFfmpegPath = await GetSystemFFmpegPathAsync();
+            if (effectiveFfmpegPath == null)
+            {
+                return ProcessResult.CreateError("FFmpeg not found. Please ensure FFmpeg is bundled with the application or available in system PATH.");
+            }
         }
 
         if (!File.Exists(options.InputPath))
@@ -40,6 +112,16 @@ public class FFmpegService
 
         try
         {
+            // Set status for hardware acceleration
+            if (options.UseHardwareAcceleration)
+            {
+                StatusChanged?.Invoke(this, "Using hardware acceleration (auto-detect)");
+            }
+            else
+            {
+                StatusChanged?.Invoke(this, "Using software encoding only");
+            }
+            
             // Get video duration for progress calculation
             var duration = await GetVideoDurationAsync(options.InputPath);
             
@@ -59,13 +141,13 @@ public class FFmpegService
             // Start FFmpeg process
             var processStartInfo = new ProcessStartInfo
             {
-                FileName = _ffmpegPath,
+                FileName = effectiveFfmpegPath,
                 Arguments = arguments,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 CreateNoWindow = true,
-                WorkingDirectory = Path.GetDirectoryName(_ffmpegPath)
+                WorkingDirectory = Path.GetDirectoryName(effectiveFfmpegPath) ?? Environment.CurrentDirectory
             };
 
             _currentProcess = new Process { StartInfo = processStartInfo };
@@ -153,13 +235,32 @@ public class FFmpegService
 
     private string BuildFFmpegCommand(OptimizationOptions options)
     {
-        var command = $"-i \"{options.InputPath}\"";
+        var command = "";
+        
+        // Add hardware acceleration if enabled
+        if (options.UseHardwareAcceleration)
+        {
+            command += "-hwaccel auto ";
+        }
+        
+        command += $"-i \"{options.InputPath}\"";
+        
+        // Video codec settings - use libx264 with hardware acceleration
         command += $" -c:v {options.VideoCodec}";
+        
+        // Add web safety options
+        command += $" -profile:v {options.VideoProfile}";
+        command += $" -pix_fmt {options.PixelFormat}";
+        
+        // Quality settings
         command += $" -crf {options.CrfValue}";
         command += $" -preset {options.Preset}";
+        
+        // Audio settings
         command += $" -c:a {options.AudioCodec}";
         command += $" -b:a {options.AudioBitrate}";
         
+        // Web safety: Add faststart for web compatibility
         if (options.AddFastStart)
         {
             command += " -movflags +faststart";
@@ -175,15 +276,68 @@ public class FFmpegService
         return command;
     }
 
+    private async Task<string?> GetSystemFFprobePathAsync()
+    {
+        var systemPaths = new[] { "ffprobe", "ffprobe.exe" };
+        
+        foreach (var ffprobeName in systemPaths)
+        {
+            try
+            {
+                var processStartInfo = new ProcessStartInfo
+                {
+                    FileName = ffprobeName,
+                    Arguments = "-version",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
+                };
+
+                using var process = new Process { StartInfo = processStartInfo };
+                process.Start();
+                await process.WaitForExitAsync();
+                
+                if (process.ExitCode == 0)
+                {
+                    return ffprobeName;
+                }
+            }
+            catch
+            {
+                // Continue to next path
+            }
+        }
+        
+        return null;
+    }
+
     private async Task<TimeSpan> GetVideoDurationAsync(string videoPath)
     {
+        string? effectiveFfprobePath = null;
+        
+        if (File.Exists(_ffprobePath))
+        {
+            effectiveFfprobePath = _ffprobePath;
+        }
+        else
+        {
+            // Try to use system FFprobe if bundled version not available
+            effectiveFfprobePath = await GetSystemFFprobePathAsync();
+            if (effectiveFfprobePath == null)
+            {
+                System.Diagnostics.Debug.WriteLine("FFprobe not found in bundled location or system PATH");
+                return TimeSpan.Zero;
+            }
+        }
+
         try
         {
             var arguments = $"-v quiet -show_entries format=duration -of csv=p=0 \"{videoPath}\"";
             
             var processStartInfo = new ProcessStartInfo
             {
-                FileName = _ffprobePath,
+                FileName = effectiveFfprobePath,
                 Arguments = arguments,
                 UseShellExecute = false,
                 RedirectStandardOutput = true,

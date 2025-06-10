@@ -1,34 +1,27 @@
+using System;
 using System.IO;
 
 namespace SmolVideo.Models;
 
-public class OptimizationOptions
+public class EditingOptions
 {
     public string InputPath { get; set; } = string.Empty;
     public string OutputPath { get; set; } = string.Empty;
-    public int CrfValue { get; set; } = 18;
-    public string VideoCodec { get; set; } = "libx264";
-    public string AudioCodec { get; set; } = "aac";
-    public string AudioBitrate { get; set; } = "128k";
-    public string Preset { get; set; } = "medium";
-    public bool AddFastStart { get; set; } = true;
-    public bool OverwriteExisting { get; set; } = false;
-    
-    // Hardware acceleration options
-    public bool UseHardwareAcceleration { get; set; } = true;
-    
-    // Web safety options
-    public string VideoProfile { get; set; } = "main";
-    public string PixelFormat { get; set; } = "yuv420p";
+    public TimeSpan TrimStart { get; set; } = TimeSpan.Zero;
+    public TimeSpan TrimEnd { get; set; } = TimeSpan.Zero;
+    public TimeSpan Duration { get; set; } = TimeSpan.Zero;
+    public CropSettings Crop { get; set; } = new();
+    public ResizeSettings Resize { get; set; } = new();
+    public int CrfValue { get; set; } = 18; // Default CRF value for high quality
+    public bool HasTrimming => TrimStart > TimeSpan.Zero || TrimEnd < Duration;
+    public bool HasCropping => Crop.HasCropping;
+    public bool HasResizing => Resize.HasResizing;
 
     public string GetOutputFileName()
     {
         var directory = Path.GetDirectoryName(InputPath) ?? string.Empty;
         var nameWithoutExtension = Path.GetFileNameWithoutExtension(InputPath);
-        var originalExtension = Path.GetExtension(InputPath).ToLowerInvariant();
-        
-        // If input is already MP4, add "_optimized" suffix
-        var suffix = originalExtension == ".mp4" ? "_optimized" : string.Empty;
+        var suffix = "_edited";
         var outputFileName = $"{nameWithoutExtension}{suffix}.mp4";
         
         return Path.Combine(directory, outputFileName);
@@ -40,7 +33,7 @@ public class OptimizationOptions
         var counter = 1;
         var finalPath = basePath;
 
-        while (File.Exists(finalPath) && !OverwriteExisting)
+        while (File.Exists(finalPath))
         {
             var directory = Path.GetDirectoryName(basePath) ?? string.Empty;
             var nameWithoutExtension = Path.GetFileNameWithoutExtension(basePath);
